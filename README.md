@@ -78,7 +78,7 @@ Ajoute un nouveau film à la base de données.
     "note": 4
 }
 ```
-### Exemple de requête
+### Exemple de réponse
 
 ```json
 {
@@ -118,7 +118,7 @@ Mise à jour d'un film spécifié par son ID
     "note": 5
 }
 ```
-### Exemple de requête
+### Exemple de réponse
 
 ```json
 {
