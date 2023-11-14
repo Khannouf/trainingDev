@@ -63,8 +63,8 @@ Ajoute un nouveau film à la base de données.
 
 ### Paramètre du corps de la requête
 
-* nom: Nom du film
-* description: Description du film
+* nom: Nom du film *
+* description: Description du film *
 * date_parution: Date de parution du film
 * note: note du film
 
