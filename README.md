@@ -28,7 +28,7 @@ Récupère la liste complète de tous les films.
 
 ```
 
-## 1. Détail d'un films 
+## 1. Détail d'un film 
 
 ### Endpoint
 
