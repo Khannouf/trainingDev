@@ -125,7 +125,7 @@ Mise à jour d'un film spécifié par son ID
   "message": "Film mis à jour avec succès",
 }
 ```
-## 4. Suppression d'un film
+## 5. Suppression d'un film
 
 ### Endpoint
 
