@@ -63,8 +63,8 @@ Ajoute un nouveau film à la base de données.
 
 ### Paramètre du corps de la requête
 
-* nom: Nom du film *
-* description: Description du film *
+* nom: Nom du film 
+* description: Description du film 
 * date_parution: Date de parution du film
 * note: note du film
 
@@ -85,4 +85,66 @@ Ajoute un nouveau film à la base de données.
   "message": "Film ajouté avec succès",
   "insertId": 6
 }
+```
+
+## 4. Mise à jour d'un film
+
+### Endpoint
+
+GET /film/update/:id
+
+### Description 
+
+Mise à jour d'un film spécifié par son ID
+
+### Paramètres
+
+* id: ID du film à mettre à jour 
+
+### Paramètre du corps de la requête
+
+* nom: Nouveau nom du film 
+* description: Nouvelle description du film 
+* date_parution: Nouvelle date de parution du film
+* note: Nouvelle note du film
+
+### Exemple de requête
+
+```json
+{
+    "nom": "Nouveau Titre",
+    "description": "Nouvelle Description film",
+    "date_parution": "2023-02-01",
+    "note": 5
+}
+```
+### Exemple de requête
+
+```json
+{
+  "message": "Film mis à jour avec succès",
+}
+```
+## 4. Suppression d'un film
+
+### Endpoint
+
+GET /film/delete/:id
+
+### Description 
+
+Supprime un film spécifié par son ID.
+
+### Paramètre 
+
+* id: ID du film à supprimer 
+
+### Exemple de réponse
+
+```json
+{
+  "message": "Film supprimé avec succès",
+}
+
+
 
