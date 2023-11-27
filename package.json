@@ -3,16 +3,32 @@
   "version": "1.0.0",
   "description": "entrainement de développement",
   "main": "app.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "lint": "eslint ."
   },
   "author": "lucas",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^3.6.5",
+    "sequelize": "^6.35.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.1.0"
   }
 }

@@ -1,17 +1,21 @@
-const express = require('express')
+import "dotenv/config"
+
+import cors from "cors"
+import express from "express"
+
+import sequelize from "./models/db.config.js"
+import Films from "./routes/film.routes.js"
+
 const app = express()
-const port = 3000
-const connection = require('./connexion')
-connection.connect((err) => {
-  if (err) {
-    console.error("Erreur : " + err.stack);
-  }
-  console.log("Connexion réussie");
-});
+const port = process.env.SERVER_PORT || 3000
+
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req,res) => res.send('Hello 2'))
-const films = require("./routes/film")
-app.use(express.json());
-app.use("/film", films)
+app.use("/film", Films())
+
+sequelize.sync().then(() => console.log("Database connection OK"))
 
 app.listen(port, () => console.log(`démare sur le port spécifié : http://localhost:${port}`))
