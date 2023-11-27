@@ -1,0 +1,54 @@
+{
+  "env": {
+      "browser": true,
+      "es2021": true,
+      "node": true,
+      "jest": true
+  },
+  "extends": [
+      "standard",
+      "prettier"
+  ],
+  "parserOptions": {
+      "ecmaFeatures": {
+          "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+  },
+  "ignorePatterns": [
+      "node_modules",
+      "dist",
+      "assets",
+      "public"
+  ],
+  "plugins": [
+      "prettier"
+  ],
+  "rules": {
+      "no-empty": "warn",
+      "no-useless-catch": 1,
+      "no-useless-constructor": "off",
+      "no-control-regex": "off",
+      "no-eval": "off",
+      "no-empty-pattern": "warn",
+      "no-empty-character-class": "off",
+      "prefer-const": "warn",
+      "no-unused-vars": "off",
+      "no-empty-function": "off",
+      "array-callback-return": "off",
+      "no-useless-rename": 1,
+      "object-shorthand": 1,
+      "prettier/prettier": 1
+  },
+  "overrides": [
+      {
+          "files": [
+              "*.js"
+          ],
+          "rules": {
+              "no-undef": "off"
+          }
+      }
+  ]
+}
