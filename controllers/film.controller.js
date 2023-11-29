@@ -20,6 +20,7 @@ export const getFilm = async (req, res) => {
 
 export const createFilm = async (req, res) => {
   const { name, description, releaseDate, rating } = req.body
+  console.log(req.body)
   if (!name || !description || !releaseDate) return res.status(400).json({ type: "error", message: "Name, description, rating and release date are required." })
   
   const film = await Film.create({ nom: name, description, date_parution: releaseDate, note: rating })
@@ -38,7 +39,7 @@ export const updateFilm = async (req, res) => {
   })
   if (!film) return res.status(400).json({ type: "error", message: "Film is undefined" })
   
-  await Film.update({ nom: name, description, date_parution: releaseDate, note: rating })
+  await Film.update({ nom: name, description, date_parution: releaseDate, note: rating }, { where : { id } })
   res.json({ type: "success", message: "Film updated." })
 }
 
