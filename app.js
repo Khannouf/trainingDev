@@ -13,9 +13,11 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.get('/', (req,res) => res.send('Hello 2'))
-app.use("/film", Films())
+app.get("/", (req, res) => res.send("Hello 2"))
+app.use("/films", Films())
 
 sequelize.sync().then(() => console.log("Database connection OK"))
 
-app.listen(port, () => console.log(`démare sur le port spécifié : http://localhost:${port}`))
+app.listen(port, () =>
+  console.log(`démare sur le port spécifié : http://localhost:${port}`),
+)

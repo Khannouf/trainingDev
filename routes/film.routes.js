@@ -1,13 +1,21 @@
 import { Router } from "express"
-import { getAllFilm, getFilm, createFilm, updateFilm, removeFilm } from "../controllers/film.controller.js"
+
+import {
+  createFilm,
+  getAllFilm,
+  getFilm,
+  getFilmByTitle,
+  removeFilm,
+  updateFilm,
+} from "../controllers/film.controller.js"
 
 const Films = () => {
   const router = Router()
   router.get("/", getAllFilm)
+  router.post("/", createFilm)
   router.get("/:id", getFilm)
-  router.post("/create", createFilm)
-  router.patch("/update/:id", updateFilm)
-  router.delete("/delete/:id", removeFilm)
+  router.patch("/:id", updateFilm)
+  router.delete("/:id", removeFilm)
 
   return router
 }
