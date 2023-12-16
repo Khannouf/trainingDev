@@ -4,7 +4,6 @@ import {
   createFilm,
   getAllFilm,
   getFilm,
-  getFilmByTitle,
   removeFilm,
   updateFilm,
 } from "../controllers/film.controller.js"

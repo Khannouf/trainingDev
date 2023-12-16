@@ -45,21 +45,6 @@ export const getFilm = async (req, res) => {
   res.status(200).json({ type: "success", data: film })
 }
 
-export const getFilmByTitle = async (req, res) => {
-  const title = req.query
-  console.log(title)
-  if (!title)
-    return res.status(400).json({ type: "error", message: "Title is required" })
-
-  const film = await Film.findOne({
-    where: { nom: title },
-  })
-  if (!film)
-    return res.status(400).json({ type: "error", message: "Film is undefined" })
-
-  res.status(200).json({ type: "success", data: film })
-}
-
 export const createFilm = async (req, res) => {
   const { name, description, releaseDate, rating } = req.body
   console.log(req.body)
