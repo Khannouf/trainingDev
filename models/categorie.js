@@ -6,9 +6,9 @@ import { DataTypes, Sequelize } from "sequelize"
  * @returns {typeof import('sequelize').Model}
  */
 
-const setupFilm = sequelize => {
-  const Film = sequelize.define(
-    "film",
+const setupCategorie = sequelize => {
+  const Categorie = sequelize.define(
+    "categorie",
     {
       id: {
         type: DataTypes.INTEGER(11),
@@ -20,26 +20,19 @@ const setupFilm = sequelize => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      description: {
-        type: DataTypes.TEXT,
-      },
-      date_parution: {
-        type: DataTypes.DATEONLY,
-      },
-      note: {
-        type: DataTypes.INTEGER(11),
-      },
     },
     { timestamps: false, freezeTableName: true },
   );
 
-  // Film.associate = (models) => {
-  //   Film.belongsToMany(models.Categorie, {
+  // Categorie.associate = (models) => {
+  //   Categorie.belongsToMany(models.Film, {
   //     through: 'FilmCategorie',
-  //     //foreignKey: 'filmId'
-  //   })
-  // }
-  return Film
+  //     //foreignKey: 'id'
+  //   });
+  // };
+
+
+  return Categorie
 }
 
-export default setupFilm
+export default setupCategorie
