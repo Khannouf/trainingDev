@@ -2,6 +2,32 @@
 
 Cette API gère les opérations CRUD (Create, Read, Update, Delete) pour une entité "film", une entité "category" et permet la gestion des catégories associées aux films.
 
+## Installation
+
+First, clone this repository:
+
+<!-- start:code block -->
+# Clone this repository
+git clone https://github.com/Khannouf/trainingDev.git
+or
+git clone git@github.com:Khannouf/trainingDev.git
+cd trainingDev
+
+# Install dependencies
+pnpm i
+
+# Copy the example .env file
+cp .env.example .env
+
+# Run the app
+pnpm run dev
+
+# Use http://localhost:3000 in your API Platform
+use http://localhost:3000
+<!-- end:code block -->
+
+## I/ Film
+
 ## 1. Liste des films 
 
 ### Endpoint
@@ -78,7 +104,7 @@ Ajoute un nouveau film à la base de données, avec la possibilité d'associer d
 
 ### Paramètre du corps de la requête
 
-* nom: Nom du film 
+* name: Nom du film 
 * description: Description du film 
 * releaseDate: Date de parution du film
 * rating: Note du film (optionnel)
@@ -88,7 +114,7 @@ Ajoute un nouveau film à la base de données, avec la possibilité d'associer d
 
 ```json
 {
-    "nom": "Nouveau film",
+    "name": "Nouveau film",
     "description": "Description du nouveau film",
     "releaseDate": "2023-01-01",
     "rating": 4,
@@ -138,7 +164,7 @@ Mise à jour d'un film spécifié par son ID, avec la possibilité de modifier l
 
 ### Paramètre du corps de la requête
 
-* nom: Nouveau nom du film 
+* name: Nouveau nom du film 
 * description: Nouvelle description du film 
 * releaseDate: Nouvelle date de parution du film
 * rating: Nouvelle note du film (optionnel)
@@ -148,7 +174,7 @@ Mise à jour d'un film spécifié par son ID, avec la possibilité de modifier l
 
 ```json
 {
-    "nom": "Nouveau Titre",
+    "name": "Nouveau Titre",
     "description": "Nouvelle Description du film",
     "releaseDate": "2023-02-01",
     "rating": 5,
@@ -184,6 +210,169 @@ Supprime un film spécifié par son ID, ainsi que ses associations de catégorie
 	"type": "success",
 	"message": "Film removed successfully."
 }
+```
 
+## II/ Category
 
+## 1. Liste des catégories 
+
+### Endpoint
+
+GET /cagetories
+
+### Paramètres de requête
+
+- `query` (optionnel) : Terme de recherche pour filtrer les categories par leur nom.
+
+### Description 
+
+Récupère la liste complète de toutes les catégories. Si un terme de recherche `query` est fourni, les catégories sont filtrés en fonction de leur nom.
+
+### Exemple de réponse
+
+```json
+{
+	"type": "success",
+	"data": [
+		{
+			"id": 1,
+			"nom": "Action"
+		},
+		{
+			"id": 2,
+			"nom": "Policier"
+		},
+    // ... autres catégories selon la requête de recherche ...
+  ]
+}
+```
+
+## 2. Détail d'une catégorie 
+
+### Endpoint
+
+GET /categories/:id
+
+### Description 
+
+Récupère une catégorie par son ID, incluant les films associés.
+
+### Exemple de réponse
+
+```json
+{
+	"type": "success",
+	"data": {
+		"category": {
+			"id": 1,
+			"nom": "Action"
+		},
+		"films": [
+			{
+				"id": 4,
+				"nom": "Titre du film",
+				"description": "Description du film",
+				"date_parution": "2023-01-01",
+				"note": 4
+			},
+      {
+				"id": 7,
+				"nom": "Titre du film2",
+				"description": "Description du film2",
+				"date_parution": "2023-01-02",
+				"note": 3
+			}
+    ]
+  }
+}
+```
+
+## 3. Ajout d'une catégorie
+
+### Endpoint
+
+POST /categories
+
+### Description 
+
+Ajoute une nouvelle catégorie à la base de données.
+
+### Paramètre du corps de la requête
+
+* name: Nom de la catégorie 
+
+### Exemple de requête
+
+```json
+{
+    "name": "Nouvelle catégorie",
+}
+```
+### Exemple de réponse
+
+```json
+{
+	"type": "success",
+	"data": {
+    "id": 1,
+    "nom": "Action"
+	}
+}
+```
+
+## 4. Mise à jour d'une catégorie
+
+### Endpoint
+
+PATCH /categories/:id
+
+### Description 
+
+Mise à jour d'une catégorie spécifié par son ID.
+
+### Paramètres
+
+* id: ID de la catégorie à mettre à jour 
+
+### Paramètre du corps de la requête
+
+* name: Nouveau nom de la catégorie 
+
+### Exemple de requête
+
+```json
+{
+    "name": "Nouveau Nom"
+}
+```
+### Exemple de réponse
+
+```json
+{
+	"type": "success",
+	"message": "Category updated."
+}
+```
+## 5. Suppression d'une catégorie
+
+### Endpoint
+
+DELETE /categories/:id
+
+### Description 
+
+Supprime une catégorie spécifié par son ID, ainsi que ses associations de films.
+
+### Paramètre 
+
+* id: ID de la catégorie à supprimer 
+
+### Exemple de réponse
+
+```json
+{
+	"type": "success",
+	"message": "Category removed successfully."
+}
+```
 
