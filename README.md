@@ -2,29 +2,43 @@
 
 Cette API gère les opérations CRUD (Create, Read, Update, Delete) pour une entité "film", une entité "category" et permet la gestion des catégories associées aux films.
 
-## Installation
+# Installation
 
-First, clone this repository:
+## Installation Steps
 
-<!-- start:code block -->
-# Clone this repository
+1. **Clone the Repository**:
+```
 git clone https://github.com/Khannouf/trainingDev.git
 or
 git clone git@github.com:Khannouf/trainingDev.git
+```
+
+2. **Install Dependencies**:
+```
 cd trainingDev
-
-# Install dependencies
 pnpm i
+```
 
-# Copy the example .env file
+3. **Copy the example .env file & Configure the Environment**:
+```
 cp .env.example .env
+DB_DATABASE=database_name
+DB_USERNAME=username
+DB_PASSWORD=password
+DB_HOST=database_host
+DB_PORT=database_port
+```
 
-# Run the app
+4. **Initialize the Database**:
+```
+Ensure your database is up and running and matches the settings in your `.env` file.
+```
+
+5. **Start the Server**:
+```
 pnpm run dev
-
-# Use http://localhost:3000 in your API Platform
-use http://localhost:3000
-<!-- end:code block -->
+```
+The server should now be running and the API accessible via `http://localhost:3000`.
 
 ## I/ Film
 
