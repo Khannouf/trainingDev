@@ -2,8 +2,6 @@
 
 Cette API gère les opérations CRUD (Create, Read, Update, Delete) pour une entité "film", une entité "category" et permet la gestion des catégories associées aux films.
 
-# Installation
-
 ## Installation Steps
 
 1. **Clone the Repository**:
