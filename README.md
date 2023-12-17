@@ -6,7 +6,7 @@ Cette API gère les opérations CRUD (Create, Read, Update, Delete) pour une ent
 
 ### Endpoint
 
-GET /film
+GET /films
 
 ### Description 
 
@@ -32,7 +32,7 @@ Récupère la liste complète de tous les films.
 
 ### Endpoint
 
-GET /film/:id
+GET /films/:id
 
 ### Description 
 
@@ -55,7 +55,7 @@ Récupère le détail d'un film par son ID.
 
 ### Endpoint
 
-GET /film/create
+POST /films
 
 ### Description 
 
@@ -91,7 +91,7 @@ Ajoute un nouveau film à la base de données.
 
 ### Endpoint
 
-GET /film/update/:id
+PATCH /films/:id
 
 ### Description 
 
@@ -129,7 +129,7 @@ Mise à jour d'un film spécifié par son ID
 
 ### Endpoint
 
-GET /film/delete/:id
+DELETE /films/:id
 
 ### Description 
 

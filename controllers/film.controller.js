@@ -46,8 +46,8 @@ export const getFilm = async (req, res) => {
 }
 
 export const getFilmByCategorie= async (req, res) => {
-  const categorieId = req.params.categorieId
-  if (!categorieId)
+  const id = req.params.id
+  if (!id)
     return res.status(400).json({ type: "error", message: "Id is required" })
 
   const films = await Film.findAll({
@@ -55,19 +55,19 @@ export const getFilmByCategorie= async (req, res) => {
       {
         model: Categorie,
         through: FilmCategorie,
-        where: { id: categorieId }
+        where: { id }
       },
     ],
-  });
+  })
   if(!films)
     return res.status(400).json({ type: "error", message: "Film is undefined" })
 
-  return res.status(200).json({ type: "success", data: films });
+  return res.status(200).json({ type: "success", data: films })
 }
 
 export const getCategorieByFilm= async (req, res) => {
-  const filmId = req.params.filmId
-  if (!filmId)
+  const id = req.params.id
+  if (!id)
     return res.status(400).json({ type: "error", message: "Id is required" })
 
   const categories = await Categorie.findAll({
@@ -75,29 +75,14 @@ export const getCategorieByFilm= async (req, res) => {
       {
         model: Film,
         through: FilmCategorie,
-        where: { id: filmId }
+        where: { id }
       },
     ],
-  });
-  if(!categories)
-    return res.status(400).json({ type: "error", message: "Film is undefined" })
-
-  return res.status(200).json({ type: "success", data: categories });
-}
-
-export const getFilmByTitle = async (req, res) => {
-  const title = req.query
-  console.log(title)
-  if (!title)
-    return res.status(400).json({ type: "error", message: "Title is required" })
-
-  const film = await Film.findOne({
-    where: { nom: title },
   })
-  if (!film)
-    return res.status(400).json({ type: "error", message: "Film is undefined" })
+  if(!categories)
+    return res.status(400).json({ type: "error", message: "Category is undefined" })
 
-  res.status(200).json({ type: "success", data: film })
+  return res.status(200).json({ type: "success", data: categories })
 }
 
 export const createFilm = async (req, res) => {

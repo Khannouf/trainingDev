@@ -5,7 +5,6 @@ import {
   getAllFilm,
   getFilm,
   getFilmByCategorie,
-  getFilmByTitle,
   getCategorieByFilm,
   removeFilm,
   updateFilm,
@@ -16,12 +15,11 @@ const Films = () => {
   router.get("/", getAllFilm)
   router.post("/", createFilm)
   router.get("/:id", getFilm)
-  router.get("/bycategorie/:categorieId", getFilmByCategorie)
-  router.get("/byfilm/:filmId", getCategorieByFilm)
+  router.get("/categorie/:id", getFilmByCategorie)
+  router.get("/film/:id", getCategorieByFilm)
   router.patch("/:id", updateFilm)
   router.delete("/:id", removeFilm)
   
-
   return router
 }
 
