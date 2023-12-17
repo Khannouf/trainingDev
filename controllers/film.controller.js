@@ -1,6 +1,6 @@
 import { Op } from "sequelize"
 
-import { Film } from "../models/db.config.js"
+import { Categorie, Film, FilmCategorie } from "../models/db.config.js"
 
 export const getAllFilm = async (req, res) => {
   const { query, limit: limitString = "10", page: pageString = "0" } = req.query
@@ -43,6 +43,46 @@ export const getFilm = async (req, res) => {
     return res.status(400).json({ type: "error", message: "Film is undefined" })
 
   res.status(200).json({ type: "success", data: film })
+}
+
+export const getFilmByCategorie= async (req, res) => {
+  const categorieId = req.params.categorieId
+  if (!categorieId)
+    return res.status(400).json({ type: "error", message: "Id is required" })
+
+  const films = await Film.findAll({
+    include: [
+      {
+        model: Categorie,
+        through: FilmCategorie,
+        where: { id: categorieId }
+      },
+    ],
+  });
+  if(!films)
+    return res.status(400).json({ type: "error", message: "Film is undefined" })
+
+  return res.status(200).json({ type: "success", data: films });
+}
+
+export const getCategorieByFilm= async (req, res) => {
+  const filmId = req.params.filmId
+  if (!filmId)
+    return res.status(400).json({ type: "error", message: "Id is required" })
+
+  const categories = await Categorie.findAll({
+    include: [
+      {
+        model: Film,
+        through: FilmCategorie,
+        where: { id: filmId }
+      },
+    ],
+  });
+  if(!categories)
+    return res.status(400).json({ type: "error", message: "Film is undefined" })
+
+  return res.status(200).json({ type: "success", data: categories });
 }
 
 export const getFilmByTitle = async (req, res) => {

@@ -24,14 +24,6 @@ const setupCategorie = sequelize => {
     { timestamps: false, freezeTableName: true },
   );
 
-  // Categorie.associate = (models) => {
-  //   Categorie.belongsToMany(models.Film, {
-  //     through: 'FilmCategorie',
-  //     //foreignKey: 'id'
-  //   });
-  // };
-
-
   return Categorie
 }
 

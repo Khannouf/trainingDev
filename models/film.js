@@ -33,12 +33,6 @@ const setupFilm = sequelize => {
     { timestamps: false, freezeTableName: true },
   );
 
-  // Film.associate = (models) => {
-  //   Film.belongsToMany(models.Categorie, {
-  //     through: 'FilmCategorie',
-  //     //foreignKey: 'filmId'
-  //   })
-  // }
   return Film
 }
 
