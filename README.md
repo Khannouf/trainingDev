@@ -30,9 +30,7 @@ DB_PORT=database_port
 ```
 
 4. **Initialize the Database**:
-```
 Ensure your database is up and running and matches the settings in your `.env` file.
-```
 
 5. **Start the Server**:
 ```
