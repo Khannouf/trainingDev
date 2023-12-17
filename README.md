@@ -1,6 +1,6 @@
 # API Films
 
-Cette API gère les opérations CRUD (Create, Read, Update, Delete) pour une entité "film".
+Cette API gère les opérations CRUD (Create, Read, Update, Delete) pour une entité "film", une entité "category" et permet la gestion des catégories associées aux films.
 
 ## 1. Liste des films 
 
@@ -8,9 +8,15 @@ Cette API gère les opérations CRUD (Create, Read, Update, Delete) pour une ent
 
 GET /films
 
+### Paramètres de requête
+
+- `query` (optionnel) : Terme de recherche pour filtrer les films par leur nom ou description.
+- `limit` (optionnel) : Nombre maximal de films à retourner (par défaut 10, max 50).
+- `page` (optionnel) : Numéro de page pour la pagination (commence à 1).
+
 ### Description 
 
-Récupère la liste complète de tous les films.
+Récupère une liste paginée de films. Si un terme de recherche `query` est fourni, les films sont filtrés en fonction de leur nom ou de leur description. La pagination est gérée via les paramètres `limit` et `page`.
 
 ### Exemple de réponse
 
@@ -23,12 +29,11 @@ Récupère la liste complète de tous les films.
     "date_parution": "2023-01-01",
     "note": 4
   },
-  // ... autres films ...
+  // ... autres films selon la pagination et la requête de recherche ...
 ]
-
 ```
 
-## 1. Détail d'un film 
+## 2. Détail d'un film 
 
 ### Endpoint
 
@@ -36,7 +41,7 @@ GET /films/:id
 
 ### Description 
 
-Récupère le détail d'un film par son ID.
+Récupère le détail d'un film par son ID, incluant ses catégories.
 
 ### Exemple de réponse
 
@@ -46,7 +51,17 @@ Récupère le détail d'un film par son ID.
     "nom": "Titre du film",
     "description": "Description du film",
     "date_parution": "2023-01-01",
-    "note": 4
+    "note": 4,
+    "categories": [
+      {
+        "id": 1,
+        "nom": "Action"
+      },
+      {
+        "id": 3,
+        "nom": "Drame"
+      }
+    ]
 },
 
 ```
@@ -59,14 +74,15 @@ POST /films
 
 ### Description 
 
-Ajoute un nouveau film à la base de données.
+Ajoute un nouveau film à la base de données, avec la possibilité d'associer des catégories.
 
 ### Paramètre du corps de la requête
 
 * nom: Nom du film 
 * description: Description du film 
-* date_parution: Date de parution du film
-* note: note du film
+* releaseDate: Date de parution du film
+* rating: Note du film (optionnel)
+* categories: Tableau des noms de catégories (optionnel)
 
 ### Exemple de requête
 
@@ -74,16 +90,35 @@ Ajoute un nouveau film à la base de données.
 {
     "nom": "Nouveau film",
     "description": "Description du nouveau film",
-    "date_parution": "2023-01-01",
-    "note": 4
+    "releaseDate": "2023-01-01",
+    "rating": 4,
+    "categories": ["Action", "Aventure"]
 }
 ```
 ### Exemple de réponse
 
 ```json
 {
-  "message": "Film ajouté avec succès",
-  "insertId": 6
+	"type": "success",
+	"data": {
+		"film": {
+			"id": 11,
+			"nom": "Nouveau film",
+			"description": "Description du nouveau film",
+			"date_parution": "2023-01-01",
+			"note": 4
+		},
+		"categories": [
+			{
+				"id": 1,
+				"nom": "Action"
+			},
+			{
+				"id": 5,
+				"nom": "Aventure"
+			}
+		]
+	}
 }
 ```
 
@@ -95,7 +130,7 @@ PATCH /films/:id
 
 ### Description 
 
-Mise à jour d'un film spécifié par son ID
+Mise à jour d'un film spécifié par son ID, avec la possibilité de modifier les catégories associées.
 
 ### Paramètres
 
@@ -105,24 +140,27 @@ Mise à jour d'un film spécifié par son ID
 
 * nom: Nouveau nom du film 
 * description: Nouvelle description du film 
-* date_parution: Nouvelle date de parution du film
-* note: Nouvelle note du film
+* releaseDate: Nouvelle date de parution du film
+* rating: Nouvelle note du film (optionnel)
+* categories: Tableau des noms de catégories à associer (optionnel)
 
 ### Exemple de requête
 
 ```json
 {
     "nom": "Nouveau Titre",
-    "description": "Nouvelle Description film",
-    "date_parution": "2023-02-01",
-    "note": 5
+    "description": "Nouvelle Description du film",
+    "releaseDate": "2023-02-01",
+    "rating": 5,
+    "categories": ["Comédie", "Drame"]
 }
 ```
 ### Exemple de réponse
 
 ```json
 {
-  "message": "Film mis à jour avec succès",
+	"type": "success",
+	"message": "Film updated."
 }
 ```
 ## 5. Suppression d'un film
@@ -133,7 +171,7 @@ DELETE /films/:id
 
 ### Description 
 
-Supprime un film spécifié par son ID.
+Supprime un film spécifié par son ID, ainsi que ses associations de catégories.
 
 ### Paramètre 
 
@@ -143,7 +181,8 @@ Supprime un film spécifié par son ID.
 
 ```json
 {
-  "message": "Film supprimé avec succès",
+	"type": "success",
+	"message": "Film removed successfully."
 }
 
 
