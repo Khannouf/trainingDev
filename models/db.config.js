@@ -4,7 +4,7 @@ import setupFilm from "./film.js"
 import setupCategorie from "./categorie.js"
 import setupFilmCategorie from "./filmCategorie.js"
 
-const sequelize = new Sequelize({
+export const sequelize = new Sequelize({
   dialect: "mysql",
   database: process.env.DB_DATABASE,
   username: process.env.DB_USERNAME,

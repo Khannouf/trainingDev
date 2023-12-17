@@ -1,6 +1,6 @@
 import { Op } from "sequelize"
 
-import { Categorie, Film, FilmCategorie } from "../models/db.config.js"
+import { Categorie, Film, FilmCategorie, sequelize } from "../models/db.config.js"
 
 export const getAllFilm = async (req, res) => {
   const { query, limit: limitString = "10", page: pageString = "0" } = req.query
@@ -42,51 +42,14 @@ export const getFilm = async (req, res) => {
   if (!film)
     return res.status(400).json({ type: "error", message: "Film is undefined" })
 
-  res.status(200).json({ type: "success", data: film })
-}
+  const filmCategories = await film.getCategories()
+  const filteredCategories = filmCategories.map(({ id, nom }) => ({ id, nom }))
 
-export const getFilmByCategorie= async (req, res) => {
-  const id = req.params.id
-  if (!id)
-    return res.status(400).json({ type: "error", message: "Id is required" })
-
-  const films = await Film.findAll({
-    include: [
-      {
-        model: Categorie,
-        through: FilmCategorie,
-        where: { id }
-      },
-    ],
-  })
-  if(!films)
-    return res.status(400).json({ type: "error", message: "Film is undefined" })
-
-  return res.status(200).json({ type: "success", data: films })
-}
-
-export const getCategorieByFilm= async (req, res) => {
-  const id = req.params.id
-  if (!id)
-    return res.status(400).json({ type: "error", message: "Id is required" })
-
-  const categories = await Categorie.findAll({
-    include: [
-      {
-        model: Film,
-        through: FilmCategorie,
-        where: { id }
-      },
-    ],
-  })
-  if(!categories)
-    return res.status(400).json({ type: "error", message: "Category is undefined" })
-
-  return res.status(200).json({ type: "success", data: categories })
+  res.status(200).json({ type: "success", data: { film, categories: filteredCategories } })
 }
 
 export const createFilm = async (req, res) => {
-  const { name, description, releaseDate, rating } = req.body
+  const { name, description, releaseDate, rating, categories } = req.body
   console.log(req.body)
   if (!name || !description || !releaseDate)
     return res.status(400).json({
@@ -94,18 +57,40 @@ export const createFilm = async (req, res) => {
       message: "Name, description, rating and release date are required.",
     })
 
-  const film = await Film.create({
-    nom: name,
-    description,
-    date_parution: releaseDate,
-    note: rating,
-  })
+  try {
+    const transaction = await sequelize.transaction()
 
-  res.json({ type: "success", data: film })
+    const film = await Film.create({
+      nom: name,
+      description,
+      date_parution: releaseDate,
+      note: rating,
+    }, { transaction })
+
+    if (categories && categories.length > 0) {
+      for (const nom of categories) {
+        let categorie = await Categorie.findOne({ where: { nom } }, { transaction })
+        if (!categorie) {
+          categorie = await Categorie.create({ nom }, { transaction })
+        }
+        await film.addCategorie(categorie, { transaction })
+      }
+    }
+
+    await transaction.commit()
+
+    const filmCategories = await film.getCategories()
+    const filteredCategories = filmCategories.map(({ id, nom }) => ({ id, nom }))
+
+    res.json({ type: "success", data: { film, categories: filteredCategories } })
+  } catch(err) {
+    if (transaction) await transaction.rollback()
+    res.status(500).json({ type: "error", message: "An error occurred while creating the film." })
+  }
 }
 
 export const updateFilm = async (req, res) => {
-  const { name, description, releaseDate, rating } = req.body
+  const { name, description, releaseDate, rating, categories } = req.body
   if (!name || !description || !releaseDate)
     return res.status(400).json({
       type: "error",
@@ -121,11 +106,33 @@ export const updateFilm = async (req, res) => {
   if (!film)
     return res.status(400).json({ type: "error", message: "Film is undefined" })
 
-  await Film.update(
-    { nom: name, description, date_parution: releaseDate, note: rating },
-    { where: { id } },
-  )
-  res.json({ type: "success", message: "Film updated." })
+  const transaction = await sequelize.transaction()
+  try {
+    await Film.update(
+      { nom: name, description, date_parution: releaseDate, note: rating },
+      { where: { id } },
+      { transaction }
+    )
+
+    if (categories) {
+      await film.setCategories([], { transaction })
+
+      for (const nom of categories) {
+        let categorie = await Categorie.findOrCreate({
+          where: { nom },
+          transaction
+        })
+        await film.addCategorie(categorie[0], { transaction })
+      }
+    }
+
+    await transaction.commit()
+
+    res.json({ type: "success", message: "Film updated." })
+  } catch(err) {
+    await transaction.rollback()
+    res.status(500).json({ type: "error", message: "An error occurred while updating the film." })
+  }
 }
 
 export const removeFilm = async (req, res) => {
@@ -139,6 +146,17 @@ export const removeFilm = async (req, res) => {
   if (!film)
     return res.status(400).json({ type: "error", message: "Film is undefined" })
 
-  await Film.destroy({ where: { id } })
-  res.json({ type: "success", message: "Film removed successfully." })
+  try {
+    const transaction = await sequelize.transaction()
+
+    await FilmCategorie.destroy({ where: { filmId: id } }, { transaction })
+    await Film.destroy({ where: { id } }, { transaction })
+
+    await transaction.commit()
+
+    res.json({ type: "success", message: "Film removed successfully." })
+  } catch(err) {
+    if (transaction) await transaction.rollback()
+    res.status(500).json({ type: "error", message: "An error occurred while removing the film." })
+  }
 }
