@@ -31,7 +31,7 @@ const setupFilm = sequelize => {
       },
     },
     { timestamps: false, freezeTableName: true },
-  );
+  )
 
   return Film
 }

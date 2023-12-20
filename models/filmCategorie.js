@@ -24,8 +24,9 @@ const setupFilmCategorie = sequelize => {
         type: DataTypes.INTEGER(11),
         allowNull: false,
       },
-  }, { timestamps: false, freezeTableName: true },
-  );
+    },
+    { timestamps: false, freezeTableName: true },
+  )
 
   return FilmCategorie
 }

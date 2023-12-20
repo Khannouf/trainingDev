@@ -22,7 +22,7 @@ const setupCategorie = sequelize => {
       },
     },
     { timestamps: false, freezeTableName: true },
-  );
+  )
 
   return Categorie
 }

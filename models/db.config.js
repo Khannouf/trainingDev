@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize"
 
-import setupFilm from "./film.js"
 import setupCategorie from "./categorie.js"
+import setupFilm from "./film.js"
 import setupFilmCategorie from "./filmCategorie.js"
 
 export const sequelize = new Sequelize({
@@ -16,9 +16,13 @@ export const sequelize = new Sequelize({
 
 export const Film = (sequelize.film = setupFilm(sequelize))
 export const Categorie = (sequelize.categorie = setupCategorie(sequelize))
-export const FilmCategorie = (sequelize.filmCategorie = setupFilmCategorie(sequelize))
+export const FilmCategorie = (sequelize.filmCategorie =
+  setupFilmCategorie(sequelize))
 
-Film.belongsToMany(Categorie, { through: FilmCategorie, foreignKey: 'filmId'});
-Categorie.belongsToMany(Film, { through: FilmCategorie, foreignKey: 'categorieId'});
+Film.belongsToMany(Categorie, { through: FilmCategorie, foreignKey: "filmId" })
+Categorie.belongsToMany(Film, {
+  through: FilmCategorie,
+  foreignKey: "categorieId",
+})
 
 export default sequelize

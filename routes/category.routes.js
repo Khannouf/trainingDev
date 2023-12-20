@@ -15,7 +15,7 @@ const Categories = () => {
   router.get("/:id", getCategory)
   router.patch("/:id", updateCategory)
   router.delete("/:id", removeCategory)
-  
+
   return router
 }
 

@@ -1,6 +1,11 @@
 import { Op } from "sequelize"
 
-import { Categorie, Film, FilmCategorie, sequelize } from "../models/db.config.js"
+import {
+  Categorie,
+  Film,
+  FilmCategorie,
+  sequelize,
+} from "../models/db.config.js"
 
 export const getAllFilm = async (req, res) => {
   const { query, limit: limitString = "10", page: pageString = "0" } = req.query
@@ -45,7 +50,9 @@ export const getFilm = async (req, res) => {
   const filmCategories = await film.getCategories()
   const filteredCategories = filmCategories.map(({ id, nom }) => ({ id, nom }))
 
-  res.status(200).json({ type: "success", data: { film, categories: filteredCategories } })
+  res
+    .status(200)
+    .json({ type: "success", data: { film, categories: filteredCategories } })
 }
 
 export const createFilm = async (req, res) => {
@@ -60,16 +67,22 @@ export const createFilm = async (req, res) => {
   try {
     const transaction = await sequelize.transaction()
 
-    const film = await Film.create({
-      nom: name,
-      description,
-      date_parution: releaseDate,
-      note: rating,
-    }, { transaction })
+    const film = await Film.create(
+      {
+        nom: name,
+        description,
+        date_parution: releaseDate,
+        note: rating,
+      },
+      { transaction },
+    )
 
     if (categories && categories.length > 0) {
       for (const nom of categories) {
-        let categorie = await Categorie.findOne({ where: { nom } }, { transaction })
+        let categorie = await Categorie.findOne(
+          { where: { nom } },
+          { transaction },
+        )
         if (!categorie) {
           categorie = await Categorie.create({ nom }, { transaction })
         }
@@ -80,12 +93,21 @@ export const createFilm = async (req, res) => {
     await transaction.commit()
 
     const filmCategories = await film.getCategories()
-    const filteredCategories = filmCategories.map(({ id, nom }) => ({ id, nom }))
+    const filteredCategories = filmCategories.map(({ id, nom }) => ({
+      id,
+      nom,
+    }))
 
-    res.json({ type: "success", data: { film, categories: filteredCategories } })
-  } catch(err) {
+    res.json({
+      type: "success",
+      data: { film, categories: filteredCategories },
+    })
+  } catch (err) {
     if (transaction) await transaction.rollback()
-    res.status(500).json({ type: "error", message: "An error occurred while creating the film." })
+    res.status(500).json({
+      type: "error",
+      message: "An error occurred while creating the film.",
+    })
   }
 }
 
@@ -111,16 +133,16 @@ export const updateFilm = async (req, res) => {
     await Film.update(
       { nom: name, description, date_parution: releaseDate, note: rating },
       { where: { id } },
-      { transaction }
+      { transaction },
     )
 
     if (categories) {
       await film.setCategories([], { transaction })
 
       for (const nom of categories) {
-        let categorie = await Categorie.findOrCreate({
+        const categorie = await Categorie.findOrCreate({
           where: { nom },
-          transaction
+          transaction,
         })
         await film.addCategorie(categorie[0], { transaction })
       }
@@ -129,9 +151,12 @@ export const updateFilm = async (req, res) => {
     await transaction.commit()
 
     res.json({ type: "success", message: "Film updated." })
-  } catch(err) {
+  } catch (err) {
     await transaction.rollback()
-    res.status(500).json({ type: "error", message: "An error occurred while updating the film." })
+    res.status(500).json({
+      type: "error",
+      message: "An error occurred while updating the film.",
+    })
   }
 }
 
@@ -155,8 +180,11 @@ export const removeFilm = async (req, res) => {
     await transaction.commit()
 
     res.json({ type: "success", message: "Film removed successfully." })
-  } catch(err) {
+  } catch (err) {
     if (transaction) await transaction.rollback()
-    res.status(500).json({ type: "error", message: "An error occurred while removing the film." })
+    res.status(500).json({
+      type: "error",
+      message: "An error occurred while removing the film.",
+    })
   }
 }

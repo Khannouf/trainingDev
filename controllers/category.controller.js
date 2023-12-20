@@ -25,12 +25,24 @@ export const getCategory = async (req, res) => {
     where: { id },
   })
   if (!category)
-    return res.status(400).json({ type: "error", message: "Category is undefined" })
+    return res
+      .status(400)
+      .json({ type: "error", message: "Category is undefined" })
 
   const categoryFilms = await category.getFilms()
-  const filteredFilms = categoryFilms.map(({ id, nom, description, date_parution, note }) => ({ id, nom, description, date_parution, note }))
+  const filteredFilms = categoryFilms.map(
+    ({ id, nom, description, date_parution, note }) => ({
+      id,
+      nom,
+      description,
+      date_parution,
+      note,
+    }),
+  )
 
-  res.status(200).json({ type: "success", data: { category, films: filteredFilms } })
+  res
+    .status(200)
+    .json({ type: "success", data: { category, films: filteredFilms } })
 }
 
 export const createCategory = async (req, res) => {
@@ -64,12 +76,11 @@ export const updateCategory = async (req, res) => {
     where: { id },
   })
   if (!category)
-    return res.status(400).json({ type: "error", message: "Category is undefined" })
+    return res
+      .status(400)
+      .json({ type: "error", message: "Category is undefined" })
 
-  await Categorie.update(
-    { nom: name },
-    { where: { id } },
-  )
+  await Categorie.update({ nom: name }, { where: { id } })
   res.json({ type: "success", message: "Category updated." })
 }
 
@@ -82,7 +93,9 @@ export const removeCategory = async (req, res) => {
     where: { id },
   })
   if (!category)
-    return res.status(400).json({ type: "error", message: "Category is undefined" })
+    return res
+      .status(400)
+      .json({ type: "error", message: "Category is undefined" })
 
   try {
     const transaction = await sequelize.transaction()
@@ -93,8 +106,11 @@ export const removeCategory = async (req, res) => {
     await transaction.commit()
 
     res.json({ type: "success", message: "Category removed successfully." })
-  } catch(err) {
+  } catch (err) {
     if (transaction) await transaction.rollback()
-    res.status(500).json({ type: "error", message: "An error occurred while removing the category." })
+    res.status(500).json({
+      type: "error",
+      message: "An error occurred while removing the category.",
+    })
   }
 }

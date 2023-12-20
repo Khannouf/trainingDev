@@ -4,8 +4,8 @@ import cors from "cors"
 import express from "express"
 
 import sequelize from "./models/db.config.js"
-import Films from "./routes/film.routes.js"
 import Categories from "./routes/category.routes.js"
+import Films from "./routes/film.routes.js"
 
 const app = express()
 const port = process.env.SERVER_PORT || 3000
